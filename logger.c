@@ -64,11 +64,11 @@ int logger_init(struct logger_config *cfg)
 
 int logger_generic(int level, char *str, ...)
 {
-	va_list va;
-	char log[LOG_MAX_LENGTH];
+    va_list va;
+    char log[LOG_MAX_LENGTH];
 
-	va_start(va, str);
-	vsprintf(log, str, va);
+    va_start(va, str);
+    vsprintf(log, str, va);
     fprintf(stderr, "%s[%s%s%s]%s%s%s",
             _logger_config->decorator[level][0],
             _logger_config->decorator[level][1],
@@ -78,8 +78,8 @@ int logger_generic(int level, char *str, ...)
             log,
             _logger_config->decorator[level][4]
             );
-	va_end(va);
+    va_end(va);
 
-	return 0;
+    return 0;
 }
 
