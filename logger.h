@@ -6,10 +6,10 @@
 #define _LIBLOGGER_INF 2
 #define _LIBLOGGER_DEB 3
 
-#define logger_error(...)	logger_generic(_LIBLOGGER_ERR, __VA_ARGS__)
-#define logger_warning(...)	logger_generic(_LIBLOGGER_WAR, __VA_ARGS__)
-#define logger_info(...)	logger_generic(_LIBLOGGER_INF, __VA_ARGS__)
-#define logger_debug(...)	logger_generic(_LIBLOGGER_DEB, __VA_ARGS__)
+#define logger_error(...)   logger_generic(_LIBLOGGER_ERR, __VA_ARGS__)
+#define logger_warning(...) logger_generic(_LIBLOGGER_WAR, __VA_ARGS__)
+#define logger_info(...)    logger_generic(_LIBLOGGER_INF, __VA_ARGS__)
+#define logger_debug(...)   logger_generic(_LIBLOGGER_DEB, __VA_ARGS__)
 
 #define _LIBLOGGER_LEVELS       4
 #define _LIBLOGGER_DECORATORS   5
