@@ -34,12 +34,12 @@ int logger_init(struct logger_config *cfg)
         strcpy(_logger_config->level[3], "DEB");
 
         /* decorators */
-        const int default_size[] = {1, 6, 5, 2, 1};
-        const char* default_colors[] = {
-            "\x1B[31m", /* red */
-            "\x1B[33m", /* yellow */
-            "\x1B[32m", /* green */
-            "\x1B[36m"  /* blue */
+        const int default_size[] = {2, 2, 2, 7, 6, 2, 1, 1};
+        const char* default_pre_level[] = {
+            "[\x1B[31m", /* red */
+            "[\x1B[33m", /* yellow */
+            "[\x1B[32m", /* green */
+            "[\x1B[36m"  /* blue */
         };
 
         for(i=0; i<_LIBLOGGER_LEVELS; i++)
@@ -51,11 +51,14 @@ int logger_init(struct logger_config *cfg)
                 if(!_logger_config->decorator[i][j]) return 6*j+i;
             }
 
-            _logger_config->decorator[i][0][0] = 0;
-            strcpy(_logger_config->decorator[i][1], default_colors[i]);
-            strcpy(_logger_config->decorator[i][2], "\x1B[0m");
-            strcpy(_logger_config->decorator[i][3], " ");
-            _logger_config->decorator[i][4][0] = 0;
+            strcpy(_logger_config->decorator[i][0], "(");
+            strcpy(_logger_config->decorator[i][1], ")");
+            strcpy(_logger_config->decorator[i][2], " ");
+            strcpy(_logger_config->decorator[i][3], default_pre_level[i]);
+            strcpy(_logger_config->decorator[i][4], "\x1B[0m]");
+            strcpy(_logger_config->decorator[i][5], " ");
+            _logger_config->decorator[i][6][0] = 0;
+            _logger_config->decorator[i][7][0] = 0;
         }
     }
 
@@ -69,14 +72,17 @@ int logger_generic(int level, char *str, ...)
 
     va_start(va, str);
     vsprintf(log, str, va);
-    fprintf(stderr, "%s[%s%s%s]%s%s%s",
+    fprintf(stderr, "%s%s%s%s%s%s%s%s%s%s",
             _logger_config->decorator[level][0],
             _logger_config->decorator[level][1],
-            _logger_config->level[level],
             _logger_config->decorator[level][2],
             _logger_config->decorator[level][3],
+            _logger_config->level[level],
+            _logger_config->decorator[level][4],
+            _logger_config->decorator[level][5],
+            _logger_config->decorator[level][6],
             log,
-            _logger_config->decorator[level][4]
+            _logger_config->decorator[level][7]
             );
     va_end(va);
 

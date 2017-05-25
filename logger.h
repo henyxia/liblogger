@@ -12,11 +12,12 @@
 #define logger_debug(...)   logger_generic(_LIBLOGGER_DEB, __VA_ARGS__)
 
 #define _LIBLOGGER_LEVELS       4
-#define _LIBLOGGER_DECORATORS   5
+#define _LIBLOGGER_DECORATORS   8
 
 struct logger_config {
     char* level[_LIBLOGGER_LEVELS];
     char* decorator[_LIBLOGGER_LEVELS][_LIBLOGGER_DECORATORS];
+    char* date_format;
 };
 
 int logger_generic(int, char*, ...);
