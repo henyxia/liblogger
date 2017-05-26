@@ -33,6 +33,12 @@ int logger_init(struct logger_config *cfg)
         strcpy(_logger_config->level[2], "INF");
         strcpy(_logger_config->level[3], "DEB");
 
+        /* date format */
+        _logger_config->date_format = malloc(sizeof(char)*6);
+        if(!_logger_config->date_format) return 6;
+
+        strcpy(_logger_config->date_format, "%X %x");
+
         /* decorators */
         const int default_size[] = {2, 2, 2, 7, 6, 2, 1, 1};
         const char* default_pre_level[] = {
@@ -48,7 +54,7 @@ int logger_init(struct logger_config *cfg)
             {
                 _logger_config->decorator[i][j] = (char*) malloc(
                         sizeof(char)*default_size[i]);
-                if(!_logger_config->decorator[i][j]) return 6*j+i;
+                if(!_logger_config->decorator[i][j]) return 7*j+i;
             }
 
             strcpy(_logger_config->decorator[i][0], "(");
@@ -72,8 +78,9 @@ int logger_generic(int level, char *str, ...)
 
     va_start(va, str);
     vsprintf(log, str, va);
-    fprintf(stderr, "%s%s%s%s%s%s%s%s%s%s",
+    fprintf(stderr, "%s%s%s%s%s%s%s%s%s%s%s",
             _logger_config->decorator[level][0],
+            _logger_config->date_format,
             _logger_config->decorator[level][1],
             _logger_config->decorator[level][2],
             _logger_config->decorator[level][3],
