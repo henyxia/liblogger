@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <time.h>
 
 #define LOG_MAX_LENGTH 80
+#define MAX_TIME_BUFFER_LENGTH  80
 
 const char *log_levels[] = {"ERR", "WAR", "INF", "DEB"};
 struct logger_config *_logger_config;
@@ -37,7 +39,7 @@ int logger_init(struct logger_config *cfg)
         _logger_config->date_format = malloc(sizeof(char)*6);
         if(!_logger_config->date_format) return 6;
 
-        strcpy(_logger_config->date_format, "%X %x");
+        strcpy(_logger_config->date_format, "%x %X");
 
         /* decorators */
         const int default_size[] = {2, 2, 2, 7, 6, 2, 1, 1};
@@ -75,12 +77,24 @@ int logger_generic(int level, char *str, ...)
 {
     va_list va;
     char log[LOG_MAX_LENGTH];
+    char time_buffer[MAX_TIME_BUFFER_LENGTH];
+    struct tm *info;
+    time_t rawtime;
+    int ret;
+
+    ret = time(&rawtime);
+    if(ret < 0) return 1;
+
+    info = localtime(&rawtime);
+
+    strftime(time_buffer, MAX_TIME_BUFFER_LENGTH, _logger_config->date_format,
+            info);
 
     va_start(va, str);
     vsprintf(log, str, va);
     fprintf(stderr, "%s%s%s%s%s%s%s%s%s%s%s",
             _logger_config->decorator[level][0],
-            _logger_config->date_format,
+            time_buffer,
             _logger_config->decorator[level][1],
             _logger_config->decorator[level][2],
             _logger_config->decorator[level][3],
