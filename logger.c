@@ -9,7 +9,6 @@
 #define LOG_MAX_LENGTH 80
 #define MAX_TIME_BUFFER_LENGTH  80
 
-const char *log_levels[] = {"ERR", "WAR", "INF", "DEB"};
 struct logger_config *_logger_config;
 
 int logger_init(struct logger_config *cfg)
@@ -26,14 +25,17 @@ int logger_init(struct logger_config *cfg)
         /* error msg  */
         for(i=0; i<_LIBLOGGER_LEVELS; i++)
         {
-            _logger_config->level[i] = (char*) malloc(sizeof(char)*4);
+            _logger_config->level[i] = (char*) malloc(sizeof(char)*6);
             if(!_logger_config->level[i]) return 2+i;
         }
 
-        strcpy(_logger_config->level[0], "ERR");
-        strcpy(_logger_config->level[1], "WAR");
-        strcpy(_logger_config->level[2], "INF");
-        strcpy(_logger_config->level[3], "DEB");
+        strcpy(_logger_config->level[0], "FATAL");
+        strcpy(_logger_config->level[1], "ERROR");
+        strcpy(_logger_config->level[2], "WARN ");
+        strcpy(_logger_config->level[3], "INFO ");
+        strcpy(_logger_config->level[4], "DEBUG");
+        strcpy(_logger_config->level[5], "TRACE");
+        strcpy(_logger_config->level[6], "ALL  ");
 
         /* date format */
         _logger_config->date_format = malloc(sizeof(char)*6);
@@ -44,10 +46,13 @@ int logger_init(struct logger_config *cfg)
         /* decorators */
         const int default_size[] = {2, 2, 2, 7, 6, 2, 1, 1};
         const char* default_pre_level[] = {
-            "[\x1B[31m", /* red */
-            "[\x1B[33m", /* yellow */
-            "[\x1B[32m", /* green */
-            "[\x1B[36m"  /* blue */
+            "[\x1B[35m", /* fatal - purple */
+            "[\x1B[31m", /* error - red */
+            "[\x1B[33m", /* warn - yellow */
+            "[\x1B[32m", /* info - green */
+            "[\x1B[34m", /* debug - blue */
+            "[\x1B[36m", /* trace - cyan */
+            "[\x1B[37m"  /* all - grey */
         };
 
         for(i=0; i<_LIBLOGGER_LEVELS; i++)
